@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         loadingText.style.display = "none";
 
-        if (!data || !data.periods || data.periods.length === 0) {
+        if (!data || data.length === 0) {
             betsContainer.innerHTML = "<p>No value bets found.</p>";
             return;
         }
 
         const list = document.createElement("ul");
-        data.periods.forEach(period => {
+        data.forEach(period => {
             const item = document.createElement("li");
             item.textContent = `${period.description} (${period.short_description})`;
             list.appendChild(item);
