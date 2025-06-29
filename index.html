@@ -1,14 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BetSharp</title>
+    <meta charset="UTF-8">
+    <title>BetSharp</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { font-size: 2em; }
+        .error { color: red; }
+    </style>
 </head>
 <body>
-  <h1>BetSharp</h1>
-  <p>Loading value bets...</p>
-  <script src="script.js"></script>
+    <h1>BetSharp</h1>
+    <p id="loading">Loading value bets...</p>
+    <div id="bets-container"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>

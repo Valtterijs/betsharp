@@ -1,36 +1,29 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    const loadingElement = document.getElementById('loading');
+    const betsContainer = document.getElementById('bets-container');
 
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.createElement("div");
-  container.style.padding = "1rem";
-  container.innerHTML = "<h2>Loading value bets...</h2>";
-  document.body.appendChild(container);
+    try {
+        const response = await fetch('https://betsharp-proxy.vercel.app/api');
+        if (!response.ok) throw new Error('API response not OK');
 
-  fetch("https://betsharp-proxy.vercel.app/api/odds")
-    .then((res) => {
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      return res.json();
-    })
-    .then((data) => {
-      container.innerHTML = "<h2>Value Bets</h2>";
-      if (!Array.isArray(data) || data.length === 0) {
-        container.innerHTML += "<p>No value bets found.</p>";
-        return;
-      }
+        const bets = await response.json();
+        loadingElement.style.display = 'none';
 
-      const list = document.createElement("ul");
-      data.forEach((bet) => {
-        const item = document.createElement("li");
-        item.innerHTML = `
-          <strong>${bet.match}</strong><br>
-          Market: ${bet.market} - Selection: ${bet.selection}<br>
-          Odds: ${bet.odds} - Real Prob: ${bet.realProb}%<br>
-          EV: ${bet.ev.toFixed(2)}%
-        `;
-        list.appendChild(item);
-      });
-      container.appendChild(list);
-    })
-    .catch((err) => {
-      container.innerHTML = `<p style="color:red;">Virhe API-haussa: ${err.message}</p>`;
-    });
+        if (bets.length === 0) {
+            betsContainer.innerHTML = '<p>No value bets found.</p>';
+            return;
+        }
+
+        const list = document.createElement('ul');
+        bets.forEach(bet => {
+            const item = document.createElement('li');
+            item.textContent = `${bet.homeTeam} vs ${bet.awayTeam} – ${bet.market} @ ${bet.odds} (EV: ${bet.ev}%)`;
+            list.appendChild(item);
+        });
+
+        betsContainer.appendChild(list);
+    } catch (error) {
+        loadingElement.innerHTML = '<span class="error">Virhe API-haussa: Load failed</span>';
+        console.error('Fetch error:', error);
+    }
 });
